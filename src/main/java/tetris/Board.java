@@ -4,6 +4,8 @@
 
 package tetris;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class Board {
@@ -11,7 +13,6 @@ public class Board {
     private final int rows;
     private final int columns;
     private boolean isFalling = false;
-    private int positionRow = -1;
     private Block block;
     private List<Block> fallenBlocks = new ArrayList<>();
     private int fallenCount;
@@ -25,23 +26,25 @@ public class Board {
         String s = "";
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                if(isEmpty(row) == null){
-                    if(block != null) {
-//                        System.out.println("block.position: " + block.postion() + block.display() + col + row);
-                        s += row == block.postion() && col == 1 ? block.display() : ".";
-                    } else
-                        s += ".";
-                } else
-                    s += row == isEmpty(row).postion() && col == 1 ? isEmpty(row).display() : ".";
+                s += displayOf(row, col);
             }
             s += "\n";
         }
         return s;
     }
 
-    private Block isEmpty(int row) {
+    @NotNull
+    private String displayOf(int row, int col) {
+        Block block = blockIn(row);
+        if (block == null) {
+            block = this.block;
+        }
+        return block != null && row == block.position() && col == 1 ? block.display() : ".";
+    }
+
+    private Block blockIn(int row) {
         for(int i = 0; i < fallenBlocks.size(); i++) {
-            if(fallenBlocks.get(i).postion() == row)
+            if(fallenBlocks.get(i).position() == row)
                 return fallenBlocks.get(i);
         }
         return null;
@@ -62,8 +65,8 @@ public class Board {
     }
 
     public void tick() {
-        System.out.println(block.postion());
-        if (block.postion() == fallenCount - 1) {
+        System.out.println(block.position());
+        if (block.position() == fallenCount - 1) {
             isFalling = false;
             fallenBlocks.add(block);
             fallenCount--;

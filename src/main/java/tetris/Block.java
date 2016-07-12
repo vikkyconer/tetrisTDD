@@ -4,6 +4,8 @@
 
 package tetris;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by vikas on 8/7/16.
  */
@@ -15,20 +17,21 @@ public class Block {
         this.position = 0;
     }
 
-    public char display() {
-        return block;
-    }
-
     @Override
     public String toString()
     {
         return String.valueOf(block);
     }
 
-    public int postion() {
+    public int position() {
         return position;
     }
     public void updatePostion() {
         this.position++;
+    }
+
+    @NotNull
+    public String display() {
+        return String.valueOf(block);
     }
 }
